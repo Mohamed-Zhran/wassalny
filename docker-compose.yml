@@ -1,74 +1,68 @@
 version: '3'
 services:
 
-    php:
-        build:
-            args:
-                user: syam
-                uid: 1000
-            context: .
-            dockerfile: ./docker/Dockerfile
-        volumes:
-            - ./:/var/www/
-            - $HOME/.composer/:$HOME/.composer/
-        environment:
-            - "DB_HOST=mysql"
-            - "DB_DATABASE=tielearn"
-            - "DB_USERNAME=tielearn"
-            - "DB_PASSWORD=tielearn"
-            - "REDIS_HOST=redis"
-            - "REDIS_PORT=6379"
-        networks:
-            - service-network
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
 
-    nginx:
-        image: nginx:alpine
-        container_name: web-server
-        restart: unless-stopped
-        tty: true
-        ports:
-            - "8000:80"
-        volumes:
-            - ./:/var/www
-            - ./docker/nginx/conf.d:/etc/nginx/conf.d/
-        networks:
-            - service-network
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - mysql
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
 
-    mysql:
-        image: mariadb:10.5.8
-        volumes:
-            - mysqldata:/var/lib/mysql
-        environment:
-            - "MYSQL_ROOT_PASSWORD=tielearn"
-            - "MYSQL_DATABASE=tielearn"
-            - "MYSQL_USER=tielearn"
-            - "MYSQL_PASSWORD=tielearn"
-        ports:
-            - "3306:3306"
-        networks:
-            - service-network
+  #MySQL Service
+  mysql:
+    image: 'mysql:8'
+    container_name: mysql_macdo
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: macdo
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata_macdo:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/my.cnf
+    networks:
+      - app-network
 
-    phpmyadmin:
-        image: phpmyadmin
-        restart: always
-        ports:
-            - 8001:80
-        environment:
-            - PMA_ARBITRARY=1
-            - PMA_HOST=mysql
-        networks:
-            - service-network
-    redis:
-        image: redis:4.0-alpine
-        command: redis-server --appendonly yes
-        ports:
-            - "6379:6379"
-        networks:
-            - service-network
-
-volumes:
-    mysqldata:
-
+#Docker Networks
 networks:
-    service-network:
-        driver: bridge
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata_macdo:
+    driver: local
