@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: digitalocean.com/php
-    container_name: app
+    container_name: app_wassalny
     restart: unless-stopped
     tty: true
     environment:
@@ -23,7 +23,7 @@ services:
   #Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: webserver
+    container_name: webserver_wassalny
     restart: unless-stopped
     tty: true
     depends_on:
@@ -41,19 +41,19 @@ services:
   #MySQL Service
   mysql:
     image: 'mysql:8'
-    container_name: mysql_macdo
+    container_name: mysql_wassalny
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     tty: true
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: macdo
+      MYSQL_DATABASE: wassalny
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - dbdata_macdo:/var/lib/mysql/
+      - dbdata_wassalny:/var/lib/mysql/
       - ./mysql/my.cnf:/etc/my.cnf
     networks:
       - app-network
@@ -64,5 +64,5 @@ networks:
     driver: bridge
 #Volumes
 volumes:
-  dbdata_macdo:
+  dbdata_wassalny:
     driver: local
