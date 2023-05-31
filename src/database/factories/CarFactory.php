@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class CarFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => fake()->unique()->randomElement(User::pluck('id')->all()),
             'model' => fake()->name(),
             'color' => fake()->colorName(),
             'brand' => fake()->name(),

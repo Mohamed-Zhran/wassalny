@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Car extends Model
 {
-    use HasFactory;
+
+  use HasFactory;
+
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
 }

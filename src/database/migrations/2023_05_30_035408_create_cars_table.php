@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('model');
             $table->string('brand');
             $table->smallInteger('cc');
-            $table->string('plate_code');
+            $table->string('plate_code')->unique();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }
