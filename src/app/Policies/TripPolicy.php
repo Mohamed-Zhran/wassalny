@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Trips;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class TripsPolicy
+class TripPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class TripsPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Trips $trips): bool
+    public function view(User $user, Trip $trip): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class TripsPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Trips $trips): bool
+    public function update(User $user, Trip $trip): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class TripsPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Trips $trips): bool
+    public function delete(User $user, Trip $trip): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class TripsPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Trips $trips): bool
+    public function restore(User $user, Trip $trip): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class TripsPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Trips $trips): bool
+    public function forceDelete(User $user, Trip $trip): bool
     {
         //
     }

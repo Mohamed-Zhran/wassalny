@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTripsRequest;
-use App\Http\Requests\UpdateTripsRequest;
-use App\Models\Trips;
+use App\Http\Requests\StoreTripRequest;
+use App\Http\Requests\UpdateTripRequest;
+use App\Models\Trip;
 
-class TripsController extends Controller
+class TripController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class TripsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTripsRequest $request)
+    public function store(StoreTripRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class TripsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Trips $trips)
+    public function show(Trip $trip)
     {
         //
     }
@@ -43,7 +43,7 @@ class TripsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Trips $trips)
+    public function edit(Trip $trip)
     {
         //
     }
@@ -51,7 +51,7 @@ class TripsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTripsRequest $request, Trips $trips)
+    public function update(UpdateTripRequest $request, Trip $trip)
     {
         //
     }
@@ -59,7 +59,7 @@ class TripsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Trips $trips)
+    public function destroy(Trip $trip)
     {
         //
     }

@@ -59,6 +59,6 @@ class User extends Authenticatable
 
   public function userTrip()
   {
-    return $this->hasMany(UserTrips::class);
+    return $this->hasMany(UserTrip::class);
   }
 }

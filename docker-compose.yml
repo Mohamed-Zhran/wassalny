@@ -1,7 +1,5 @@
 version: '3'
 services:
-
-  #PHP Service
   app:
     build:
       context: .
@@ -15,14 +13,12 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
-      - ./src:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - './src:/var/www'
+      - './php/local.ini:/usr/local/etc/php/conf.d/local.ini'
     networks:
       - app-network
-
-  #Nginx Service
   webserver:
-    image: nginx:alpine
+    image: 'nginx:alpine'
     container_name: webserver_wassalny
     restart: unless-stopped
     tty: true
@@ -30,39 +26,34 @@ services:
       - mysql
       - app
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
-      - ./src:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - './src:/var/www'
+      - './nginx/conf.d/:/etc/nginx/conf.d/'
     networks:
       - app-network
-
-  #MySQL Service
   mysql:
     image: 'mysql:8'
     container_name: mysql_wassalny
-    command: --default-authentication-plugin=mysql_native_password
+    command: '--default-authentication-plugin=mysql_native_password'
     restart: always
     tty: true
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
       MYSQL_DATABASE: wassalny
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - dbdata_wassalny:/var/lib/mysql/
-      - ./mysql/my.cnf:/etc/my.cnf
+      - 'dbdata_wassalny:/var/lib/mysql/'
+      - './mysql/my.cnf:/etc/my.cnf'
     networks:
       - app-network
-
-#Docker Networks
 networks:
   app-network:
     driver: bridge
-#Volumes
 volumes:
   dbdata_wassalny:
     driver: local

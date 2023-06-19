@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TripsSeeder extends Seeder
+class tripeeder extends Seeder
 {
     /**
      * Run the database seeds.

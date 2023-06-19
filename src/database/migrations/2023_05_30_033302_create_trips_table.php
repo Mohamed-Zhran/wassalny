@@ -12,14 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trips', function (Blueprint $table) {
+        Schema::create('trip', function (Blueprint $table) {
             $table->id();
             $table->point('beginning');
             $table->point('destination');
             $table->tinyInteger('available_seats');
             $table->timestamps();
         });
-        DB::statement('ALTER TABLE trips ADD CONSTRAINT limit_seats CHECK (available_seats > 1 and available_seats < 55)');
+        DB::statement('ALTER TABLE trip ADD CONSTRAINT limit_seats CHECK (available_seats > 1 and available_seats < 55)');
     }
 
     /**
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trips');
+        Schema::dropIfExists('trip');
     }
 };

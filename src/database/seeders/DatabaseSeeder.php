@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Address;
 use App\Models\Car;
 use App\Models\Role;
-use App\Models\Trips;
+use App\Models\Trip;
 use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     {
          Role::factory(2)->create();
          User::factory(50)->create();
-         Trips::factory(10)->create();
+         Trip::factory(10)->create();
          Address::factory(50)->create();
     }
 }
