@@ -20,7 +20,7 @@ class TripFactory extends Factory
         return [
           'beginning' => DB::raw('POINT(32.299402, 30.625076)'),
           'destination' => DB::raw('POINT(32.299402, 30.625076)'),
-          'available_seats' => fake()->numberBetween(1,55),
+          'available_seats' => fake()->numberBetween(2,54),
         ];
     }
 }

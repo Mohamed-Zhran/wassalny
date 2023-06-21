@@ -57,8 +57,9 @@ class User extends Authenticatable
     return $this->hasOne(Address::class);
   }
 
-  public function userTrip()
-  {
-    return $this->hasMany(UserTrip::class);
-  }
+  public function trips()
+{
+    return $this->belongsToMany(Trip::class, 'user_trips');
+}
+
 }
