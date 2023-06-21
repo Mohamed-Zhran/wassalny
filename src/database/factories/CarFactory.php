@@ -23,7 +23,7 @@ class CarFactory extends Factory
             'color' => fake()->colorName(),
             'brand' => fake()->name(),
             'cc' => fake()->biasedNumberBetween(100,10000),
-            'plate_code' => fake()->word(),
+            'plate_code' => fake()->unique()->word(),
         ];
     }
 }

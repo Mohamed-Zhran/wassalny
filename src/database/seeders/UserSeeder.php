@@ -15,7 +15,21 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->hasAttached(Trip::factory(10))->hasAddress()->forRole(['name' => 'Driver'])->create();
-        User::factory(3)->hasCar()->forRole(['name' => 'Customer'])->create();
+        User::factory(50)
+            ->hasAttached(Trip::factory(10))
+            ->hasAddress()
+            ->forRole(['name' => 'Customer'])
+            ->create();
+
+        $roleId = Role::where('name','Customer')->value('id');
+        User::factory(10)
+            ->hasAddress()
+            ->create(['role_id' => $roleId]);
+
+        User::factory(25)
+            ->hasCar()
+            ->hasAddress()
+            ->forRole(['name' => 'Driver'])
+            ->create();
     }
 }

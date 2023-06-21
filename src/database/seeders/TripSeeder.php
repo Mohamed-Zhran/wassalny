@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -14,6 +15,9 @@ class TripSeeder extends Seeder
      */
     public function run(): void
     {
-         Trip::factory(10)->hasAttached(User::factory(10))->create();
+        $roleId = Role::where('name','Customer')->value('id');
+        Trip::factory(10)
+            ->hasAttached(User::factory(3)->create(['role_id' => $roleId ]))
+            ->create();
     }
 }
