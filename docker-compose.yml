@@ -26,8 +26,8 @@ services:
       - mysql
       - app
     ports:
-      - '80:80'
-      - '443:443'
+      - '82:80'
+      - '445:443'
     volumes:
       - './src:/var/www'
       - './nginx/conf.d/:/etc/nginx/conf.d/'
@@ -40,7 +40,7 @@ services:
     restart: always
     tty: true
     ports:
-      - '3306:3306'
+      - '3308:3306'
     environment:
       MYSQL_DATABASE: wassalny
       MYSQL_ROOT_PASSWORD: secret
