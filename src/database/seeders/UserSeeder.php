@@ -16,12 +16,12 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory(50)
-            ->hasAttached(Trip::factory(10))
+            ->hasTrips(10)
             ->hasAddress()
             ->forRole(['name' => 'Customer'])
             ->create();
 
-        $roleId = Role::where('name','Customer')->value('id');
+        $roleId = Role::where('name', 'Customer')->value('id');
         User::factory(10)
             ->hasAddress()
             ->create(['role_id' => $roleId]);

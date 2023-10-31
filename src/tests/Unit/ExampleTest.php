@@ -2,15 +2,19 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use App\Domain\Services\Interfaces\IUserService;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic test example.
      */
-    public function test_that_true_is_true(): void
+    public function test_users_index_gets_all_users(): void
     {
-        $this->assertTrue(true);
+        $this->assertEquals(User::all(), $this->app->makeWith(IUserService::class)->index());
     }
 }

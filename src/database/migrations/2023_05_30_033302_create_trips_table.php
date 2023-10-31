@@ -19,7 +19,7 @@ return new class extends Migration
             $table->tinyInteger('available_seats');
             $table->timestamps();
         });
-        DB::statement('ALTER TABLE trips ADD CONSTRAINT limit_seats CHECK (available_seats > 1 and available_seats < 55)');
+        // DB::statement('ALTER TABLE trips ADD CONSTRAINT limit_seats CHECK (available_seats > 1 and available_seats < 55)');
     }
 
     /**
