@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Domain\Services\Classes;
 
 use App\Domain\Repositories\Interfaces\ITripRepository;
-use App\Domain\Services\Interfaces\IUserService;
+use App\Domain\Services\Interfaces\ITripService;
 
-class UserService implements IUserService {
+class TripService implements ITripService {
     /**
      * @param TripRepository $tripRepository
      */

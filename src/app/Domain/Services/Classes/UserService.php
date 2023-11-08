@@ -13,7 +13,4 @@ class UserService implements IUserService {
      */
     public function __construct(protected IUserRepository $userRepository) {}
 
-    public function index() {
-        return $this->userRepository->findAll();
-    }
 }

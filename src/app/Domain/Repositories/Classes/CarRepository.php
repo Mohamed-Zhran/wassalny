@@ -8,24 +8,6 @@ use App\Domain\Repositories\Interfaces\ICarRepository;
 use App\Models\Car;
 use Illuminate\Database\Eloquent\Collection;
 
-class CarRepository implements ICarRepository
+class CarRepository extends AbstractRepository implements ICarRepository
 {
-    /**
-     * Undocumented function
-     *
-     * @param Car $car
-     */
-    public function __construct(protected Car $car)
-    {
-    }
-
-    /**
-     * Find all records.
-     *
-     * @return Collection
-     */
-    public function findAll(): Collection
-    {
-        return $this->car->all();
-    }
 }
