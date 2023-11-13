@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\User;
@@ -24,7 +26,7 @@ class AddressFactory extends Factory
             'street' => fake()->streetAddress(),
             'postal_code' => fake()->postcode(),
             'coordinates' => DB::raw('POINT(32.299402, 30.625076)'),
-            'user_id' => User::factory()
+            'user_id' => User::factory(),
         ];
     }
 }

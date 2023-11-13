@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,9 +20,9 @@ class TripFactory extends Factory
     public function definition(): array
     {
         return [
-          'beginning' => DB::raw('POINT(32.299402, 30.625076)'),
-          'destination' => DB::raw('POINT(32.299402, 30.625076)'),
-          'available_seats' => fake()->numberBetween(2,54),
+            'beginning' => DB::raw('POINT(32.299402, 30.625076)'),
+            'destination' => DB::raw('POINT(32.299402, 30.625076)'),
+            'available_seats' => fake()->numberBetween(2, 54),
         ];
     }
 }

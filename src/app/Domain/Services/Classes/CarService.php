@@ -7,13 +7,17 @@ namespace App\Domain\Services\Classes;
 use App\Domain\Repositories\Interfaces\ICarRepository;
 use App\Domain\Services\Interfaces\ICarService;
 
-class CarService implements ICarService {
+class CarService implements ICarService
+{
     /**
-     * @param CarRepository $carRepository
+     * @param  CarRepository  $carRepository
      */
-    public function __construct(protected ICarRepository $carRepository) {}
+    public function __construct(protected ICarRepository $carRepository)
+    {
+    }
 
-    public function index() {
+    public function index()
+    {
         return $this->carRepository->findAll();
     }
 }

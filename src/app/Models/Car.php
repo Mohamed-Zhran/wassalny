@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\CarFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Car newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Car newQuery()
@@ -31,11 +34,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Car wherePlateCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Car whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Car whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Car extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -46,6 +49,7 @@ class Car extends Model
         'plate_code',
         'user_id',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

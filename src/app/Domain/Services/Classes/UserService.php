@@ -7,10 +7,12 @@ namespace App\Domain\Services\Classes;
 use App\Domain\Repositories\Interfaces\IUserRepository;
 use App\Domain\Services\Interfaces\IUserService;
 
-class UserService implements IUserService {
+class UserService implements IUserService
+{
     /**
-     * @param UserRepository $userRepository
+     * @param  UserRepository  $userRepository
      */
-    public function __construct(protected IUserRepository $userRepository) {}
-
+    public function __construct(protected IUserRepository $userRepository)
+    {
+    }
 }

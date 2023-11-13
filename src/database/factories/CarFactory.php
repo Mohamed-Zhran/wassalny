@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\User;
@@ -22,7 +24,7 @@ class CarFactory extends Factory
             'model' => fake()->name(),
             'color' => fake()->colorName(),
             'brand' => fake()->name(),
-            'cc' => fake()->biasedNumberBetween(100,10000),
+            'cc' => fake()->biasedNumberBetween(100, 10000),
             'plate_code' => fake()->unique()->word(),
         ];
     }

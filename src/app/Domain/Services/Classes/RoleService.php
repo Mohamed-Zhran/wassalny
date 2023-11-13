@@ -7,13 +7,17 @@ namespace App\Domain\Services\Classes;
 use App\Domain\Repositories\Interfaces\IRoleRepository;
 use App\Domain\Services\Interfaces\IRoleService;
 
-class RoleService implements IRoleService {
+class RoleService implements IRoleService
+{
     /**
-     * @param RoleRepository $roleRepository
+     * @param  RoleRepository  $roleRepository
      */
-    public function __construct(protected IRoleRepository $roleRepository) {}
+    public function __construct(protected IRoleRepository $roleRepository)
+    {
+    }
 
-    public function index() {
+    public function index()
+    {
         return $this->roleRepository->findAll();
     }
 }

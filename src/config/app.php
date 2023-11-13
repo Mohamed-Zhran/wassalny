@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Providers\RepositoryServiceProvider;
 use App\Providers\ServiceServiceProvider;
 use Illuminate\Support\Facades\Facade;
