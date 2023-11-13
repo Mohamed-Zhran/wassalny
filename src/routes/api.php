@@ -24,4 +24,4 @@ Route::get('users', [App\Http\Controllers\UserController::class, 'index']);
 
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 
-// Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');

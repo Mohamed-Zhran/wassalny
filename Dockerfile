@@ -1,10 +1,10 @@
 FROM php:8.1.4-fpm
 
-# Copy composer.lock and composer.json
-COPY src/composer.lock src/composer.json /var/www/
-
 # Set working directory
 WORKDIR /var/www
+
+# Copy composer.lock and composer.json
+COPY src/composer.lock src/composer.json /var/www/
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -20,27 +20,22 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libzip-dev \
-    iputils-ping
+    libicu-dev \
+    iputils-ping \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install extensions
-RUN docker-php-ext-install pdo_mysql pdo zip exif pcntl
-# RUN docker-php-ext-configure gd --with-png=/usr/include/ --with-jpeg=/usr/include/ --with-freetype=/usr/include/
-RUN docker-php-ext-install gd
+# Install PHP extensions
+RUN docker-php-ext-configure intl && \
+    docker-php-ext-install pdo_mysql pdo zip exif pcntl intl gd
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+RUN groupadd -g 1000 www && \
+    useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy existing application directory contents
-COPY src /var/www
-
-# Copy existing application directory permissions
+# Copy existing application directory contents and set permissions
 COPY --chown=www:www ./src/ /var/www
 
 # Change current user to www

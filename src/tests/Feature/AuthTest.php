@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,6 +21,22 @@ class AuthTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create(['role_id' => 1]);
+    }
+
+
+    /** @test */
+    public function userCanRegisterSuccessfully(): void
+    {
+        //arrange
+        $role=Role::factory()->create(['name' => 'Customer']);
+        $user = User::factory()->make(['role_id'=>$role->id])->toArray();
+        $user['email']='mohamed@gmail.com';
+        $user['password']='password';
+        $user['password_confirmation']='password';
+        //act
+        $response = $this->postJson(route('register'), $user);
+        //assert
+        $response->assertCreated();
     }
 
     public function userCanLoginSuccessfully(): void
