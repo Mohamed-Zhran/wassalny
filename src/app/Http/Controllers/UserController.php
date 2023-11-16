@@ -10,11 +10,15 @@ class UserController extends Controller
 {
     public function __construct(protected IUserService $userService)
     {
-
     }
 
     public function index()
     {
         return response()->json($this->userService->index());
+    }
+
+    public function show(int $id)
+    {
+        return response()->json($this->userService->findById($id));
     }
 }

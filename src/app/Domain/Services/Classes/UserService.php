@@ -21,4 +21,9 @@ class UserService implements IUserService
     {
         return $this->userRepository->create($data);
     }
+
+    public function findById($id)
+    {
+        return $this->userRepository->findById($id);
+    }
 }

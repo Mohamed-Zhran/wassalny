@@ -8,6 +8,7 @@ use App\Domain\Services\Interfaces\IUserService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -16,19 +17,29 @@ class AuthController extends Controller
     {
     }
 
-    public function register(RegisterRequest $request)
+    /**
+     *
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $user=$this->userService->create($request->safe()->except(['password_confirmation']));
+        $user = $this->userService->create($request->safe()->except(['password_confirmation']));
         $user->load('role');
         return response()->json(['message' => 'User created successfully', 'data' => new UserResource($user)], Response::HTTP_CREATED);
     }
 
-    public function login(LoginRequest $request)
+    /**
+     *
+     * @param LoginRequest $request
+     * @return  JsonResponse
+     */
+    public function login(LoginRequest $request): JsonResponse
     {
         if (auth()->attempt($request->safe()->only(['email', 'password']))) {
             return response()->json($request->user()->createToken('authToken')->plainTextToken);
         } else {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthaorized'], 401);
         }
     }
 }

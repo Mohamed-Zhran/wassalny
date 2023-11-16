@@ -25,3 +25,5 @@ Route::get('users', [App\Http\Controllers\UserController::class, 'index']);
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
+
+Route::get('test/{id}',[App\Http\Controllers\UserController::class, 'show'])->name('test');
