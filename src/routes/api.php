@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,14 +19,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('users', [UserController::class, 'index']);
+    Route::resource('car', CarController::class);
 });
-
-Route::get('users', [App\Http\Controllers\UserController::class, 'index']);
-
-Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
-
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
-
-Route::get('test/{id}',[App\Http\Controllers\UserController::class, 'show'])->name('test');

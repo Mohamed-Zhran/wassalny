@@ -16,9 +16,4 @@ class UserController extends Controller
     {
         return response()->json($this->userService->index());
     }
-
-    public function show(int $id)
-    {
-        return response()->json($this->userService->findById($id));
-    }
 }

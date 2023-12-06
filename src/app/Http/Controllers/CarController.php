@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Services\Interfaces\ICarService;
+use App\Http\Requests\StoreCarRequest;
+use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CarController extends Controller
 {
+    public function __construct(protected ICarService $carService)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -28,9 +35,10 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCarRequest $request)
     {
-        //
+        $this->carService->create($request->validated());
+        return response()->json('car created', Response::HTTP_CREATED);
     }
 
     /**
@@ -52,9 +60,10 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Car $car)
+    public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $car = $this->carService->update($request->validated());
+        return response()->json(['message' => 'car updated', 'data' => $car], Response::HTTP_OK);
     }
 
     /**
@@ -62,6 +71,7 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        $this->carService->delete($car);
+        return response()->json('car deleted', Response::HTTP_NO_CONTENT);
     }
 }

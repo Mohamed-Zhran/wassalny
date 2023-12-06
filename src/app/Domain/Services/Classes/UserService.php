@@ -22,8 +22,8 @@ class UserService implements IUserService
         return $this->userRepository->create($data);
     }
 
-    public function findById($id)
+    public function createCar(array $data): mixed
     {
-        return $this->userRepository->findById($id);
+        auth()->user()->car()->create($data);
     }
 }

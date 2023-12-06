@@ -20,7 +20,7 @@ class CarFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->unique()->randomElement(User::pluck('id')->all()),
+            'user_id' => User::inRandomOrder()->first(),
             'model' => fake()->name(),
             'color' => fake()->colorName(),
             'brand' => fake()->name(),
