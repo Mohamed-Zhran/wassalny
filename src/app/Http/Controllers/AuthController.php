@@ -17,23 +17,14 @@ class AuthController extends Controller
     {
     }
 
-    /**
-     *
-     * @param RegisterRequest $request
-     * @return JsonResponse
-     */
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = $this->userService->create($request->safe()->except(['password_confirmation']));
         $user->load('role');
+
         return response()->json(['message' => 'User created successfully', 'data' => new UserResource($user)], Response::HTTP_CREATED);
     }
 
-    /**
-     *
-     * @param LoginRequest $request
-     * @return  JsonResponse
-     */
     public function login(LoginRequest $request): JsonResponse
     {
         if (auth()->attempt($request->safe()->only(['email', 'password']))) {

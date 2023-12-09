@@ -15,21 +15,23 @@ class AuthTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Role $role;
+
     protected static string $password = 'password';
 
     public function setUp(): void
     {
         parent::setUp();
         $this->role = Role::factory()->create(['name' => 'Customer']);
-        $this->user = User::factory()->create(['role_id' => 1, 'email' =>'mohamed2@gmail.com']);
+        $this->user = User::factory()->create(['role_id' => 1, 'email' => 'mohamed2@gmail.com']);
     }
 
     /** @test */
     public function userCanRegisterSuccessfully(): void
     {
         //arrange
-        $user = User::factory()->raw(['username'=>Str::random(8),'role_id' => $this->role->id, 'password' => self::$password, 'password_confirmation' => self::$password, 'email' => 'mohamed@gmail.com']);
+        $user = User::factory()->raw(['username' => Str::random(8), 'role_id' => $this->role->id, 'password' => self::$password, 'password_confirmation' => self::$password, 'email' => 'mohamed@gmail.com']);
         //act
         $response = $this->postJson(route('register'), $user);
         //assert

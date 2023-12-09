@@ -23,15 +23,18 @@ class CarService implements ICarService
 
     public function create(array $data): mixed
     {
-        return auth()->user()->car()->create($data);
+        return $this->carRepository->create($data);
     }
 
-    public function update(array $data):mixed
+    public function update(array $data, int $id): mixed
     {
-        return auth()->user()->car->update($data);
+        $car = $this->carRepository->findById($id);
+
+        return $car->update($data);
     }
-    public function delete(): void
+
+    public function delete(int $id): void
     {
-        auth()->user()->car->delete();
+        $this->carRepository->delete($id);
     }
 }

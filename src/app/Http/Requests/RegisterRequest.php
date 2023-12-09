@@ -30,7 +30,7 @@ class RegisterRequest extends FormRequest
             'username' => 'required|string|min:8|max:100',
             'password' => 'required|string|min:8|max:20|confirmed',
             'password_confirmation' => 'required',
-            'role_id'=>'required|exists:roles,id|integer'
+            'role_id' => 'required|exists:roles,id|integer',
         ];
     }
 }

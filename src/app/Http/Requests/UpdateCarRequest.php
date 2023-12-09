@@ -27,8 +27,8 @@ class UpdateCarRequest extends FormRequest
             'plate_code' => 'required|string',
             'brand' => 'required|string',
             'color' => 'required|string',
-            'cc'=>'required|integer',
-            'model'=>'required|string',
+            'cc' => 'required|integer',
+            'model' => 'required|string',
         ];
     }
 }
