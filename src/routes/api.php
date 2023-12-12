@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,5 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('users', [UserController::class, 'index']);
     Route::resource('car', CarController::class);
+    Route::resource('trip', TripController::class);
 });

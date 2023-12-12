@@ -33,8 +33,8 @@ abstract class AbstractRepository
         return $this->model->find($id)->update($data);
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id): int
     {
-        return $this->model->find($id)->delete();
+        return $this->model->destroy($id);
     }
 }

@@ -15,32 +15,33 @@ class CarTest extends TestCase
     use RefreshDatabase;
 
     protected Car $car;
-
-    protected User $user;
-
-    protected Role $role;
-
+    protected User $driver;
+    protected Role $driverRole;
+    protected User $customer;
+    protected Role $customerRole;
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->role = Role::factory()->create();
-        $this->user = User::factory()->create(['role_id' => $this->role->id]);
-        $this->car = Car::factory()->make();
+        $this->driverRole = Role::factory()->create(['name' => 'driver']);
+        $this->driver = User::factory()->create(['role_id' => $this->driverRole->id]);
+        $this->customerRole = Role::factory()->create(['name' => 'customer']);
+        $this->customer = User::factory()->create(['role_id' => $this->customerRole->id]);
+        $this->car = Car::factory()->make(['user_id' => $this->driver->id]);
     }
 
     /** @test */
     public function userCanCreateCar()
     {
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
         $response->assertCreated();
         $this->assertDatabaseHas('cars', [
             'model' => $this->car->model,
             'plate_code' => $this->car->plate_code,
-            'user_id' => $this->user->id,
+            'user_id' => $this->driver->id,
         ]);
     }
 
@@ -48,16 +49,16 @@ class CarTest extends TestCase
     public function userCantHaveTwoCars()
     {
         //arrange
-        Car::factory()->create();
+        Car::factory()->create(['user_id' => $this->driver->id]);
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
         $response->assertUnprocessable();
         $this->assertDatabaseMissing('cars', [
             'model' => $this->car->model,
             'plate_code' => $this->car->plate_code,
-            'user_id' => $this->user->id,
+            'user_id' => $this->driver->id,
         ]);
     }
 
@@ -67,10 +68,13 @@ class CarTest extends TestCase
         //arrange
         $this->car->model = 123;
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
         $response->assertUnprocessable();
+        $this->assertDatabaseMissing('cars', [
+            'model' => $this->car->model,
+        ]);
     }
 
     /** @test */
@@ -78,7 +82,7 @@ class CarTest extends TestCase
     {
         $this->car->plate_code = null;
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
         $response->assertUnprocessable()
@@ -90,7 +94,7 @@ class CarTest extends TestCase
     {
         $this->car->model = null;
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
         $response->assertUnprocessable()
@@ -102,7 +106,7 @@ class CarTest extends TestCase
     {
         $this->car->brand = null;
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
         $response->assertUnprocessable()
@@ -113,16 +117,35 @@ class CarTest extends TestCase
     public function userCanUpdateHisCar()
     {
         //arrange
-        $newCar = Car::factory()->create();
+        $newCar = Car::factory()->create(['user_id' => $this->driver->id]);
         $newCar->model = 'new model';
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->putJson(route('car.update', $newCar->id), $newCar->toArray());
         //assert
         $response->assertOk();
         $this->assertDatabaseHas('cars', [
             'model' => $newCar['model'],
-            'user_id' => $this->user->id,
+            'user_id' => $this->driver->id,
+        ]);
+    }
+
+
+    /** @test */
+    public function userCanUpdateOnlyHisOwnCar()
+    {
+        //arrange
+        $user = User::factory()->create(['role_id' => $this->driverRole->id]);
+        $newCar = Car::factory()->create(['user_id' => $this->driver->id]);
+        $newCar->model = 'new model';
+        //act
+        $this->actingAs($user);
+        $response = $this->putJson(route('car.update', $newCar->id), $newCar->toArray());
+        //assert
+        $response->assertForbidden();
+        $this->assertDatabaseMissing('cars', [
+            'model' => $newCar['model'],
+            'user_id' => $this->driver->id,
         ]);
     }
 
@@ -132,13 +155,66 @@ class CarTest extends TestCase
         //arrange
         $car = Car::factory()->create();
         //act
-        $this->actingAs($this->user);
+        $this->actingAs($this->driver);
         $response = $this->deleteJson(route('car.destroy', $car->id));
         //assert
         $response->assertNoContent();
         $this->assertDatabaseEmpty('cars');
         $this->assertDatabaseMissing('cars', [
             'id' => $car->id,
+        ]);
+    }
+
+
+    /** @test */
+    public function userCanDeleteOnlyHisOwnCar()
+    {
+        //arrange
+        $user = User::factory()->create(['role_id' => $this->driverRole->id]);
+        $car = Car::factory()->create(['user_id' => $this->driver->id]);
+        //act
+        $this->actingAs($user);
+        $response = $this->deleteJson(route('car.destroy', $car->id));
+        //assert
+        $response->assertForbidden();
+        $this->assertDatabaseHas('cars', [
+            'id' => $car->id,
+        ]);
+    }
+
+    /** @test */
+    public function userShouldBeDriverToHaveACar()
+    {
+        //arrange
+        $car = Car::factory()->make();
+        //act
+        $this->actingAs($this->driver);
+        $response = $this->postJson(route('car.store'), $car->toArray());
+        //assert
+        $response = $response->assertCreated();
+        $this->assertDatabaseHas('cars', [
+            'model' => $car->model,
+            'plate_code' => $car->plate_code,
+            'user_id' => $this->driver->id,
+        ]);
+    }
+
+    /** @test */
+    public function customerCanNotHaveACar()
+    {
+        //arrange
+        $car = Car::factory()->make();
+        //act
+        $this->actingAs($this->customer);
+        $response = $this->postJson(route('car.store'), $car->toArray());
+        //assert
+        $response = $response->assertForbidden()->assertJson([
+            'message' => 'Only drivers can create a car.'
+        ]);
+        $this->assertDatabaseMissing('cars', [
+            'model' => $car->model,
+            'plate_code' => $car->plate_code,
+            'user_id' => $this->customer->id,
         ]);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Policies;
 
 use App\Models\Car;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 class CarPolicy
 {
@@ -28,25 +29,25 @@ class CarPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user): Response
     {
-        //
+        return $user->isDriver() ? Response::allow() : Response::deny('Only drivers can create a car.');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Car $car): bool
+    public function update(User $user, Car $car): Response
     {
-        //
+        return $user->id === $car->user_id ? Response::allow() : Response::deny('You can only update your own car.');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Car $car): bool
+    public function delete(User $user, Car $car): Response
     {
-        //
+        return $user->id === $car->user_id ? Response::allow() : Response::deny('You can only delete your own car.');
     }
 
     /**

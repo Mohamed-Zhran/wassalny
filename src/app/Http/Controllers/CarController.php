@@ -37,6 +37,7 @@ class CarController extends Controller
      */
     public function store(StoreCarRequest $request)
     {
+        $this->authorize('create', Car::class);
         $this->carService->create($request->validated());
 
         return response()->json('Car is created successfully', Response::HTTP_CREATED);
@@ -63,7 +64,8 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
-        $this->carService->update($request->validated(), $car->id);
+        $this->authorize('update', $car);
+        $this->carService->update($request->validated());
 
         return response()->json(['message' => 'Car is updated successfully', 'data' => $car->refresh()], Response::HTTP_OK);
     }
@@ -73,8 +75,8 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        $this->carService->delete($car->id);
-
+        $this->authorize('delete', $car);
+        $this->carService->delete();
         return response()->json('Car is deleted successfully', Response::HTTP_NO_CONTENT);
     }
 }

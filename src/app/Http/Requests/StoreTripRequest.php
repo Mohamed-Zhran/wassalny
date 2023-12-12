@@ -13,7 +13,7 @@ class StoreTripRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class StoreTripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'beginning_lat' => 'required|decimal:2,8|numeric',
+            'beginning_lng' => 'required|decimal:2,8|numeric',
+            'destination_lat' => 'required|decimal:2,8|numeric',
+            'destination_lng' => 'required|decimal:2,8|numeric',
+            'available_seats' => 'required|integer|min:2|max:54',
         ];
     }
 }

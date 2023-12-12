@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Rules\UserIsDriver;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCarRequest extends FormRequest
@@ -29,7 +30,7 @@ class StoreCarRequest extends FormRequest
             'color' => 'required|string',
             'cc' => 'required|integer',
             'model' => 'required|string',
-            'user_id' => 'required|integer|exists:users,id|unique:cars,user_id',
+            'user_id' => ['required', 'integer', 'exists:users,id', 'unique:cars,user_id'],
         ];
     }
 }

@@ -6,6 +6,7 @@ namespace App\Domain\Services\Classes;
 
 use App\Domain\Repositories\Interfaces\ICarRepository;
 use App\Domain\Services\Interfaces\ICarService;
+use App\Models\Car;
 
 class CarService implements ICarService
 {
@@ -23,18 +24,16 @@ class CarService implements ICarService
 
     public function create(array $data): mixed
     {
-        return $this->carRepository->create($data);
+        return auth()->user()->car()->create($data);
     }
 
-    public function update(array $data, int $id): mixed
+    public function update(array $data): mixed
     {
-        $car = $this->carRepository->findById($id);
-
-        return $car->update($data);
+        return auth()->user()->car->update($data);
     }
 
-    public function delete(int $id): void
+    public function delete(): void
     {
-        $this->carRepository->delete($id);
+        auth()->user()->car->delete();
     }
 }

@@ -108,4 +108,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Trip::class)->using(TripUser::class);
     }
+
+    public function isDriver(): bool
+    {
+        return strtolower($this->role->name) === Role::DRIVER;
+    }
 }
