@@ -7,6 +7,7 @@ namespace App\Domain\Services\Classes;
 use App\Domain\Repositories\Interfaces\ICarRepository;
 use App\Domain\Services\Interfaces\ICarService;
 use App\Models\Car;
+use Illuminate\Database\Eloquent\Model;
 
 class CarService implements ICarService
 {
@@ -20,6 +21,11 @@ class CarService implements ICarService
     public function index()
     {
         return $this->carRepository->findAll();
+    }
+
+    public function findById(int $id): Model
+    {
+        return $this->carRepository->findById($id);
     }
 
     public function create(array $data): mixed

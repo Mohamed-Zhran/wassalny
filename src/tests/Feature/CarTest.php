@@ -54,10 +54,31 @@ class CarTest extends TestCase
         $this->actingAs($this->driver);
         $response = $this->postJson(route('car.store'), $this->car->toArray());
         //assert
-        $response->assertUnprocessable();
+        $response->assertForbidden();
         $this->assertDatabaseMissing('cars', [
             'model' => $this->car->model,
             'plate_code' => $this->car->plate_code,
+            'user_id' => $this->driver->id,
+        ]);
+    }
+
+    /** @test */
+    public function userCanGetHisCar()
+    {
+        //arrange
+        $car = Car::factory()->create(['user_id' => $this->driver->id]);
+        //act
+        $this->actingAs($this->driver);
+        $response = $this->getJson(route('car.show', $car->id));
+        //assert
+        $response->assertOk();
+        $response->assertJson([
+            'data' => $car->toArray()
+        ]);
+        $this->assertDatabaseHas('cars', [
+            'id' => $car->id,
+            'model' => $car->model,
+            'plate_code' => $car->plate_code,
             'user_id' => $this->driver->id,
         ]);
     }
@@ -153,7 +174,7 @@ class CarTest extends TestCase
     public function userCanDeleteHisCar()
     {
         //arrange
-        $car = Car::factory()->create();
+        $car = Car::factory()->create(['user_id' => $this->driver->id]);
         //act
         $this->actingAs($this->driver);
         $response = $this->deleteJson(route('car.destroy', $car->id));
@@ -164,7 +185,6 @@ class CarTest extends TestCase
             'id' => $car->id,
         ]);
     }
-
 
     /** @test */
     public function userCanDeleteOnlyHisOwnCar()

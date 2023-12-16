@@ -31,7 +31,7 @@ class CarPolicy
      */
     public function create(User $user): Response
     {
-        return $user->isDriver() ? Response::allow() : Response::deny('Only drivers can create a car.');
+        return $user->isDriver() && !$user->car()->exists() ? Response::allow() : Response::deny('Only drivers can create a car.');
     }
 
     /**

@@ -30,7 +30,6 @@ class StoreCarRequest extends FormRequest
             'color' => 'required|string',
             'cc' => 'required|integer',
             'model' => 'required|string',
-            'user_id' => ['required', 'integer', 'exists:users,id', 'unique:cars,user_id'],
         ];
     }
 }

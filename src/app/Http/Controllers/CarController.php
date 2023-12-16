@@ -48,7 +48,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        //
+        return response()->json(['data' => $car], Response::HTTP_OK);
     }
 
     /**
