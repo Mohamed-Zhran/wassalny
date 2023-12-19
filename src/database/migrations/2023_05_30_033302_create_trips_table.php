@@ -16,12 +16,13 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->point('beginning');
-            $table->point('destination');
+            $table->float('beginning_lat');
+            $table->float('beginning_lng');
+            $table->float('destination_lat');
+            $table->float('destination_lng');
             $table->tinyInteger('available_seats');
             $table->timestamps();
         });
-        // DB::statement('ALTER TABLE trips ADD CONSTRAINT limit_seats CHECK (available_seats > 1 and available_seats < 55)');
     }
 
     /**

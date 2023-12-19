@@ -20,8 +20,10 @@ class TripFactory extends Factory
     public function definition(): array
     {
         return [
-            'beginning' => new Point(fake()->randomFloat(5, 30, 34), fake()->randomFloat(5, 30, 34)),
-            'destination' => new Point(fake()->randomFloat(5, 30, 34), fake()->randomFloat(5, 30, 34)),
+            'beginning_lat' => fake()->randomFloat(5, 30, 34),
+            'beginning_lng' => fake()->randomFloat(5, 30, 34),
+            'destination_lat' => fake()->randomFloat(5, 30, 34),
+            'destination_lng' => fake()->randomFloat(5, 30, 34),
             'available_seats' => fake()->numberBetween(2, 54),
         ];
     }

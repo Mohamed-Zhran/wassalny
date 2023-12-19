@@ -8,6 +8,7 @@ use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Tests\TestCase;
 
@@ -21,11 +22,8 @@ class TripTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->role = Role::factory()->create();
+        $this->role = Role::factory()->create(['name' => 'driver']);
         $this->user = User::factory()->create(['role_id' => $this->role->id]);
-
-        config(['database.default' => 'mysql']);
-        config(['database.connections.mysql.database' => 'wassalny']);
     }
 
     /** @test */
@@ -35,21 +33,34 @@ class TripTest extends TestCase
         $trip = Trip::factory()->make();
         //act
         $this->actingAs($this->user);
-        $response = $this->postJson(route('trip.store'), [
-            'beginning_lat' => $trip->beginning->latitude,
-            'beginning_lng' => $trip->beginning->longitude,
-            'destination_lat' => $trip->destination->latitude,
-            'destination_lng' => $trip->destination->longitude,
-            'available_seats' => $trip->available_seats
-        ]);
+        $response = $this->postJson(route('trip.store'), $trip->toArray());
         //assert
         $response->assertOk();
-        $this->assertTrue(
-            Trip::whereEquals('beginning', $trip->beginning)
-                ->whereEquals('destination', $trip->destination)
-                ->where('available_seats', $trip->available_seats)
-                ->exists()
-        );
+        $this->assertDatabaseHas('trips', [
+            'beginning_lat' => $trip->beginning_lat,
+            'beginning_lng' => $trip->beginning_lng,
+            'destination_lat' => $trip->destination_lat,
+            'destination_lng' => $trip->destination_lng,
+            'available_seats' => $trip->available_seats,
+        ]);
+        $this->assertDatabaseHas('trip_user', [
+            'trip_id' => $response['data']['id'],
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    /** @test */
+    public function userCanGetHisTrips()
+    {
+        //arrange
+        $trip = Trip::factory()->create();
+        $trip->users()->attach($this->user->id);
+        //act
+        $this->actingAs($this->user);
+        $response = $this->getJson(route('trip.index'));
+        //assert
+        $response->assertOk();
+        $response->assertJson(['data' => [$trip->toArray()]]);
     }
 
     /** @test */
@@ -62,18 +73,19 @@ class TripTest extends TestCase
         $response = $this->putJson(route('trip.update', ['trip' => $trip->id]), [
             'beginning_lat' => 35.99,
             'beginning_lng' => 33.11,
-            'destination_lat' => $trip->destination->latitude,
-            'destination_lng' => $trip->destination->longitude,
+            'destination_lat' => $trip->destination_lat,
+            'destination_lng' => $trip->destination_lng,
             'available_seats' => 5
         ]);
         //assert
         $response->assertOk();
-        $this->assertTrue(
-            Trip::whereEquals('beginning', new Point(35.99, 33.11))
-                ->whereEquals('destination', $trip->destination)
-                ->where('available_seats', 5)
-                ->exists()
-        );
+        $this->assertDatabaseHas('trips', [
+            'beginning_lat' => 35.99,
+            'beginning_lng' => 33.11,
+            'destination_lat' => $trip->destination_lat,
+            'destination_lng' => $trip->destination_lng,
+            'available_seats' => 5,
+        ]);
     }
 
     /** @test */

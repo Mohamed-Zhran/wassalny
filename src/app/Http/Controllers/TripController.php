@@ -21,7 +21,12 @@ class TripController extends Controller
      */
     public function index()
     {
-        //
+        $trips = $this->tripService->index();
+        return response()->json([
+            'success' => true,
+            'message' => 'Trips retrieved successfully',
+            'data' => $trips,
+        ]);
     }
 
     /**
@@ -37,12 +42,19 @@ class TripController extends Controller
      */
     public function store(StoreTripRequest $request)
     {
-        $trip = $this->tripService->create($request->validated());
-        return response()->json([
-            'success' => true,
-            'message' => 'Trip created successfully',
-            'data' => $trip,
-        ]);
+        try {
+            $trip = $this->tripService->create($request->validated());
+            return response()->json([
+                'success' => true,
+                'message' => 'Trip created successfully',
+                'data' => $trip,
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
