@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('country');
             $table->string('street');
             $table->string('postal_code');
-            $table->point('coordinates');
+            $table->float('lat');
+            $table->float('lng');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

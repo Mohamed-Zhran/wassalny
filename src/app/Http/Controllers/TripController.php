@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Responder\Interfaces\IApiHttpResponder;
 use App\Domain\Services\Interfaces\ITripService;
 use App\Http\Requests\StoreTripRequest;
 use App\Http\Requests\UpdateTripRequest;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TripController extends Controller
 {
-    public function __construct(protected ITripService $tripService)
+    public function __construct(protected ITripService $tripService, protected IApiHttpResponder $apiHttpResponder)
     {
     }
     /**
@@ -22,11 +23,10 @@ class TripController extends Controller
     public function index()
     {
         $trips = $this->tripService->index();
-        return response()->json([
-            'success' => true,
-            'message' => 'Trips retrieved successfully',
-            'data' => $trips,
-        ]);
+        return $this->apiHttpResponder->response(
+            message: 'Trips retrieved successfully',
+            data: $trips,
+        );
     }
 
     /**
@@ -42,18 +42,18 @@ class TripController extends Controller
      */
     public function store(StoreTripRequest $request)
     {
+        $this->authorize('create', Trip::class);
         try {
             $trip = $this->tripService->create($request->validated());
-            return response()->json([
-                'success' => true,
-                'message' => 'Trip created successfully',
-                'data' => $trip,
-            ]);
+            return $this->apiHttpResponder->response(
+                message: 'Trip created successfully',
+                data: $trip,
+            );
         } catch (\Exception $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->apiHttpResponder->responseError(
+                message: $exception->getMessage(),
+                status: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -79,11 +79,10 @@ class TripController extends Controller
     public function update(UpdateTripRequest $request, Trip $trip)
     {
         $this->tripService->update($request->validated(), $trip);
-        return response()->json([
-            'success' => true,
-            'message' => 'Trip updated successfully',
-            'data' => $trip->fresh(),
-        ]);
+        return $this->apiHttpResponder->response(
+            message: 'Trip updated successfully',
+            data: $trip->fresh(),
+        );
     }
 
     /**
@@ -92,6 +91,6 @@ class TripController extends Controller
     public function destroy(Trip $trip)
     {
         $trip->delete();
-        return response()->json('Car is deleted successfully', Response::HTTP_NO_CONTENT);
+        return $this->apiHttpResponder->response(message: 'Car is deleted successfully', status: Response::HTTP_NO_CONTENT);
     }
 }

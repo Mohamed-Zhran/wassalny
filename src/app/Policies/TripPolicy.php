@@ -6,6 +6,7 @@ namespace App\Policies;
 
 use App\Models\Trip;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class TripPolicy
 {
@@ -30,7 +31,7 @@ class TripPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->isDriver();
     }
 
     /**
@@ -63,5 +64,10 @@ class TripPolicy
     public function forceDelete(User $user, Trip $trip): bool
     {
         //
+    }
+
+    public function book(User $user, Trip $trip): bool
+    {
+        return !$user->isDriver() && $trip->hasDriver() && $trip->users()->count() <= $trip->available_seats;
     }
 }

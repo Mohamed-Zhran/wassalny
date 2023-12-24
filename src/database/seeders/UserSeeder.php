@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
             ->hasAddress()
             ->forRole(['name' => 'Customer'])
             ->create();
+            
+        User::factory()->create(['role_id' => 1, 'email' => 'x3U3c@gmail.com']);
 
         $roleId = Role::where('name', 'Customer')->value('id');
         User::factory(10)

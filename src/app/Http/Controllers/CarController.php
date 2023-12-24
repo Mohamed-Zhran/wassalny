@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Responder\Interfaces\IApiHttpResponder;
 use App\Domain\Services\Interfaces\ICarService;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CarController extends Controller
 {
-    public function __construct(protected ICarService $carService)
+    public function __construct(protected ICarService $carService, protected IApiHttpResponder $apiHttpResponder)
     {
     }
 
@@ -40,7 +41,7 @@ class CarController extends Controller
         $this->authorize('create', Car::class);
         $this->carService->create($request->validated());
 
-        return response()->json('Car is created successfully', Response::HTTP_CREATED);
+        return $this->apiHttpResponder->response(message: 'Car is created successfully', status: Response::HTTP_CREATED);
     }
 
     /**
@@ -48,7 +49,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return response()->json(['data' => $car], Response::HTTP_OK);
+        return $this->apiHttpResponder->response(data: $car, status: Response::HTTP_OK);
     }
 
     /**
@@ -67,7 +68,7 @@ class CarController extends Controller
         $this->authorize('update', $car);
         $this->carService->update($request->validated());
 
-        return response()->json(['message' => 'Car is updated successfully', 'data' => $car->refresh()], Response::HTTP_OK);
+        return $this->apiHttpResponder->response(message: 'Car is updated successfully', data: $car->refresh(), status: Response::HTTP_OK);
     }
 
     /**
@@ -77,6 +78,6 @@ class CarController extends Controller
     {
         $this->authorize('delete', $car);
         $this->carService->delete();
-        return response()->json('Car is deleted successfully', Response::HTTP_NO_CONTENT);
+        return $this->apiHttpResponder->response(message: 'Car is deleted successfully', status: Response::HTTP_NO_CONTENT);
     }
 }

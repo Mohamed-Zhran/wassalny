@@ -10,7 +10,7 @@ use App\Domain\Services\Interfaces\IAddressService;
 class AddressService implements IAddressService
 {
     /**
-     * @param  AddressRepository  $addressRepository
+     * @param  IAddressRepository  $addressRepository
      */
     public function __construct(protected IAddressRepository $addressRepository)
     {

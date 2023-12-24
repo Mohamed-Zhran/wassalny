@@ -25,6 +25,11 @@ class Trip extends Model
         return $this->belongsToMany(User::class)->using(TripUser::class);
     }
 
+    public function hasDriver(): bool
+    {
+        return $this->users->contains(fn ($user) => $user->isDriver());
+    }
+
     protected function beginning(): Attribute
     {
         return Attribute::make(

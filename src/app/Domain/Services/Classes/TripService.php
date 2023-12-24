@@ -46,4 +46,9 @@ class TripService implements ITripService
     {
         return $trip->update($data);
     }
+
+    public function bookTrip(Trip $trip): void
+    {
+        auth()->user()->trips()->attach($trip->id);
+    }
 }

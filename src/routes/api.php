@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookTripController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
@@ -27,4 +28,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('users', [UserController::class, 'index']);
     Route::resource('car', CarController::class);
     Route::resource('trip', TripController::class);
+    Route::post('/trip/{trip}/book', BookTripController::class)->name('trip.book');
 });
+Route::get('test', [UserController::class, 'index']);

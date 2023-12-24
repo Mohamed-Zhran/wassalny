@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Responder\Interfaces\IApiHttpResponder;
 use App\Domain\Services\Interfaces\IUserService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public function __construct(protected IUserService $userService)
+    public function __construct(protected IUserService $userService, protected IApiHttpResponder $apiHttpResponder)
     {
     }
 
