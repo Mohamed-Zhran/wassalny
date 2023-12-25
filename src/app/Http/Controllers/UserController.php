@@ -12,9 +12,4 @@ class UserController extends Controller
     public function __construct(protected IUserService $userService, protected IApiHttpResponder $apiHttpResponder)
     {
     }
-
-    public function index()
-    {
-        return $this->apiHttpResponder->response(data: $this->userService->index());
-    }
 }
