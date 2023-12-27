@@ -25,9 +25,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('users', [UserController::class, 'index']);
     Route::resource('car', CarController::class);
     Route::resource('trip', TripController::class);
     Route::post('/trip/{trip}/book', BookTripController::class)->name('trip.book');
 });
-Route::get('test', [UserController::class, 'index']);
