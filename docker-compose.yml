@@ -11,6 +11,8 @@ services:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     working_dir: /var/www
+    ports:
+      - '3000:3000'
     volumes:
       - './src:/var/www'
       - './php/local.ini:/usr/local/etc/php/conf.d/local.ini'
@@ -50,9 +52,20 @@ services:
       - './mysql/my.cnf:/etc/my.cnf'
     networks:
       - app-network
+  redis:
+    image: 'redis:alpine'
+    restart: unless-stopped
+    ports:
+    - '6379:6379'
+    networks:
+      - app-network
+    volumes:
+    - 'db_redis_wasslany:/data'
 networks:
   app-network:
     driver: bridge
 volumes:
   dbdata_wassalny:
+    driver: local
+  db_redis_wasslany:
     driver: local
