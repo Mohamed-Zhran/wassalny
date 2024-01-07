@@ -30,9 +30,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Mohamed-Zhran/wassalny">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
 <h3 align="center">Wassalny</h3>
 
@@ -242,7 +239,7 @@ Project Link: [https://github.com/Mohamed-Zhran/wassalny](https://github.com/Moh
 [license-shield]: https://img.shields.io/github/license/Mohamed-Zhran/wassalny.svg?style=for-the-badge
 [license-url]: https://github.com/Mohamed-Zhran/wassalny/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://linkedin.com/in/mohamed-zhran10/
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
